@@ -1,14 +1,29 @@
-defmodule DeliriumTremex.Formatters.Map do
-  import DeliriumTremex, only: [wrap_list: 1]
+# DelirimTremex - standardised GraphQL error handling through Absinthe
+# Copyright (C) 2018 FloatingPoint.io
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-  def format(error) do
-    [
-      message: (error[:messages] || "Error") |> wrap_list() |> hd(),
+defmodule DeliriumTremex.Formatters.Map do
+  def format(%{key: _, messages: _} = error) do
+    %{
+      message:
+        (error[:message] || error[:messages] || "Error") |> List.wrap() |> hd(),
       key: error[:key],
-      messages: error[:messages],
+      messages: error[:messages] |> List.wrap(),
       full_messages: error[:full_messages] || error[:messages],
       index: error[:index],
       suberrors: error[:suberrors]
-    ]
+    } |> List.wrap()
   end
 end

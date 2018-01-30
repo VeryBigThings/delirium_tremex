@@ -21,7 +21,9 @@ defmodule DeliriumTremex.Mixfile do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:ex_doc, "~> 0.16"},
       {:ecto, "~> 2.1"},
+      {:gettext, "~> 0.13"},
       {:absinthe, "~> 1.4"},
       {:absinthe_plug, "~> 1.4"}
     ]

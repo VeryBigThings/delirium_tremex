@@ -17,7 +17,7 @@ Errors have the following format:
   "message": "Username is already taken",
   "messages": ["is already taken", "is too short"],
   "fullMessages": ["Username is already taken", "Username is to short"],
-  "index": null
+  "index": null,
   "subErrors": null
 }
 ```
@@ -44,14 +44,14 @@ E.g.: If the second comment's content is too short.
   "message": "Error validating all comments",
   "messages": null,
   "fullMessages": null,
-  "index": null
+  "index": null,
   "subErrors": [
     {
       "key": "content",
       "message": "Content is too short",
       "messages": ["is too short"],
       "fullMessages": ["Content is to short"],
-      "index": 1
+      "index": 1,
       "subErrors" null
     }
   ]

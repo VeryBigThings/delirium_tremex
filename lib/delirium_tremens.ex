@@ -32,7 +32,7 @@ defmodule DeliriumTremex do
     "key": "username",
     "message": "Username is already taken",
     "messages": ["is already taken", "is too short"],
-    "fullMessages": ["Username is already taken", "Username is to short"],
+    "fullMessages": ["Username is already taken", "Username is too short"],
     "index": null,
     "subErrors": null
   }
@@ -66,7 +66,7 @@ defmodule DeliriumTremex do
         "key": "content",
         "message": "Content is too short",
         "messages": ["is too short"],
-        "fullMessages": ["Content is to short"],
+        "fullMessages": ["Content is too short"],
         "index": 1,
         "subErrors": null
       }

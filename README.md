@@ -52,7 +52,7 @@ E.g.: If the second comment's content is too short.
       "messages": ["is too short"],
       "fullMessages": ["Content is to short"],
       "index": 1,
-      "subErrors" null
+      "subErrors": null
     }
   ]
 }

@@ -20,7 +20,7 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
   alias Absinthe.Resolution
 
   def call(%{errors: errors} = resolution, _config) when is_list(errors) do
-    Resolution.put_result(resolution, {:error, format_errors(errors) |> IO.inspect()})
+    Resolution.put_result(resolution, {:error, format_errors(errors)})
   end
 
   def call(resolution, _config) do

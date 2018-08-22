@@ -19,6 +19,8 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
 
   alias Absinthe.Resolution
 
+  @error_builder Confex.get_env(DeliriumTremex.Mixfile.project()[:app], :error_builder)
+
   def call(%{errors: errors} = resolution, _config) when is_list(errors) do
     Resolution.put_result(resolution, {:error, format_errors(errors)})
   end
@@ -43,11 +45,28 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
     DeliriumTremex.Formatters.Map.format(error)
   end
 
-  defp format_error(_error) do
+  defp format_error(error) when is_atom(error) do
+    with \
+      false <- is_nil(@error_builder),
+      %{key: _, message: _, messages: _} = err <- apply(@error_builder, :errors, [])[error]
+    do
+      err
+    else
+      _ -> unknown_error()
+    end
+    |> DeliriumTremex.Formatters.Map.format()
+  end
+
+  defp format_error(_) do
+    unknown_error()
+    |> DeliriumTremex.Formatters.Map.format()
+  end
+
+  defp unknown_error() do
     %{
       key: :unknown_error,
       message: "Something went wrong",
       messages: ["Something went wrong"]
-    } |> DeliriumTremex.Formatters.Map.format()
+    }
   end
 end

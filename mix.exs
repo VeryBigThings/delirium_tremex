@@ -4,7 +4,7 @@ defmodule DeliriumTremex.Mixfile do
   def project do
     [
       app: :delirium_tremex,
-      version: "0.1.0",
+      version: "0.1.1",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
       deps: deps()
@@ -25,7 +25,8 @@ defmodule DeliriumTremex.Mixfile do
       {:ecto, "~> 2.1"},
       {:gettext, "~> 0.13"},
       {:absinthe, "~> 1.4"},
-      {:absinthe_plug, "~> 1.4"}
+      {:absinthe_plug, "~> 1.4"},
+      {:confex, "~> 3.3.1"}
     ]
   end
 end

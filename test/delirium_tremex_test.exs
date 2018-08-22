@@ -3,7 +3,12 @@ defmodule DeliriumTremexTest do
   doctest DeliriumTremex
 
   test "format unknown error" do
-    map = DeliriumTremex.Middleware.HandleErrors.call(%{errors: [:unauthorized], state: :resolved}, %{})
+    map = DeliriumTremex.Middleware.HandleErrors.call(%{errors: [:this_error_is_not_recognised], state: :resolved}, %{})
     assert hd(map[:errors])[:key] == :unknown_error
+  end
+
+  test "format error with error builder" do
+    map = DeliriumTremex.Middleware.HandleErrors.call(%{errors: [:unauthorized], state: :resolved}, %{})
+    assert hd(map[:errors])[:key] == :unauthorized
   end
 end

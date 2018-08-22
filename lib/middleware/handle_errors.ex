@@ -42,4 +42,12 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
   defp format_error(error) when is_map(error) do
     DeliriumTremex.Formatters.Map.format(error)
   end
+
+  defp format_error(_error) do
+    %{
+      key: :unknown_error,
+      message: "Something went wrong",
+      messages: ["Something went wrong"]
+    } |> DeliriumTremex.Formatters.Map.format()
+  end
 end

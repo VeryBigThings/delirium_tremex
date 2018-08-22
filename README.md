@@ -126,7 +126,7 @@ e.g.
 
 Example for the config.exs:
 ```Elixir
-config YourAppName.Mixfile.project()[:app],
+config :delirium_tremex,
   error_builder: YourAppName.ErrorBuilder
 ```
 

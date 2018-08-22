@@ -110,7 +110,40 @@ mutation do
   end
 end
 ```
+### Error builder
 
+In your config.exs you can specify an optional error builder file to handle specific error responses. 
+
+Unhandled error responses will be formatted as unknown errors.
+e.g.
+```Elixir
+%{
+  key: :unknown_error,
+  message: "Something went wrong",
+  messages: ["Something went wrong"]
+}
+```
+
+Example for the config.exs:
+```Elixir
+config YourAppName.Mixfile.project()[:app],
+  error_builder: YourAppName.ErrorBuilder
+```
+
+Example for the error_builder.ex:
+```Elixir
+defmodule YourAppName.ErrorBuilder do
+  def errors() do
+    %{
+      unauthorized: %{
+        key: :unauthorized,
+        message: "You have insufficient privileges to access this resource",
+        messages: ["You have insufficient privileges to access this resource"]
+      }
+    }
+  end
+end
+```
 ## Contribution
 
 For suggestions, fixes or questions, please feel free to open an issue.

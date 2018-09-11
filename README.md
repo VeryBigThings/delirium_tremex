@@ -112,7 +112,7 @@ end
 ```
 ### Error builder
 
-In your config.exs you can specify an optional error builder file to handle specific error responses. 
+In your config.exs you can specify an optional error builder file to handle specific error responses.
 
 Unhandled error responses will be formatted as unknown errors.
 e.g.
@@ -133,13 +133,10 @@ config :delirium_tremex,
 Example for the error_builder.ex:
 ```Elixir
 defmodule YourAppName.ErrorBuilder do
-  def errors() do
+  def unauthorized do
     %{
-      unauthorized: %{
-        key: :unauthorized,
-        message: "You have insufficient privileges to access this resource",
-        messages: ["You have insufficient privileges to access this resource"]
-      }
+      message: "You have insufficient privileges to access this resource",
+      messages: ["You have insufficient privileges to access this resource"]
     }
   end
 end

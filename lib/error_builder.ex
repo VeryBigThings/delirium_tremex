@@ -1,11 +1,8 @@
 defmodule DeliriumTremex.ErrorBuilder do
-  def errors() do
+  def unauthorized do
     %{
-      unauthorized: %{
-        key: :unauthorized,
-        message: "You have insufficient privileges to access this resource",
-        messages: ["You have insufficient privileges to access this resource"]
-      }
+      message: "You have insufficient privileges to access this resource",
+      messages: ["You have insufficient privileges to access this resource"]
     }
   end
 end

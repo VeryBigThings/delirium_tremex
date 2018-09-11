@@ -48,9 +48,10 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
   defp format_error(error) when is_atom(error) do
     with \
       false <- is_nil(@error_builder),
-      %{key: _, message: _, messages: _} = err <- apply(@error_builder, :errors, [])[error]
+      true <- Keyword.has_key?(@error_builder.__info__(:functions), error),
+      %{message: _, messages: _} = error_message <- apply(@error_builder, error, [])
     do
-      err
+      Map.put(error_message, :key, error)
     else
       _ -> unknown_error()
     end
@@ -58,11 +59,10 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
   end
 
   defp format_error(_) do
-    unknown_error()
-    |> DeliriumTremex.Formatters.Map.format()
+    DeliriumTremex.Formatters.Map.format(unknown_error)
   end
 
-  defp unknown_error() do
+  defp unknown_error do
     %{
       key: :unknown_error,
       message: "Something went wrong",

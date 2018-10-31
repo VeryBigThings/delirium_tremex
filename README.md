@@ -148,5 +148,5 @@ Pull requests are always welcome.
 
 ## License
 
-This project is licensed under the GPLv3. It comes with absolutely no
+This project is licensed under the MIT license. It comes with absolutely no
 warranty. [The license is available in this repository.](/LICENSE.txt)

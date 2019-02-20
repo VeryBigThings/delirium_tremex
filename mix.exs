@@ -7,6 +7,7 @@ defmodule DeliriumTremex.Mixfile do
       version: "0.1.2",
       elixir: "~> 1.5",
       start_permanent: Mix.env == :prod,
+      elixirc_paths: elixirc_paths(Mix.env),
       deps: deps()
     ]
   end
@@ -18,11 +19,12 @@ defmodule DeliriumTremex.Mixfile do
     ]
   end
 
+  defp elixirc_paths(:test), do: ["lib", "test/support"]
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:ex_doc, "~> 0.16"},
-      {:ecto, "~> 2.1"},
       {:gettext, "~> 0.13"},
       {:absinthe, "~> 1.4"},
       {:absinthe_plug, "~> 1.4"},

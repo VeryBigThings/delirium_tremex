@@ -17,7 +17,16 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
     Enum.flat_map(errors, &format_error/1)
   end
 
-  defp format_error(%Ecto.Changeset{} = changeset) do
+  defp format_error(error) do
+    cond do
+      is_atom(error) -> format_atom_error(error)
+      is_map?(error) -> format_map_error(error)
+      is_changeset?(error) -> format_changeset_error(error)
+      true -> format_unknown_error(error)
+    end
+  end
+
+  defp format_changeset_error(changeset) do
     changeset
       |> Ecto.Changeset.traverse_errors(fn error -> error end)
       |> Enum.map(
@@ -25,11 +34,11 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
       )
   end
 
-  defp format_error(error) when is_map(error) do
+  defp format_map_error(error) do
     DeliriumTremex.Formatters.Map.format(error)
   end
 
-  defp format_error(error) when is_atom(error) do
+  defp format_atom_error(error) do
     with \
       false <- is_nil(@error_builder),
       true <- Keyword.has_key?(@error_builder.__info__(:functions), error),
@@ -42,8 +51,8 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
     |> DeliriumTremex.Formatters.Map.format()
   end
 
-  defp format_error(_) do
-    DeliriumTremex.Formatters.Map.format(unknown_error)
+  defp format_unknown_error(_) do
+    DeliriumTremex.Formatters.Map.format(unknown_error())
   end
 
   defp unknown_error do
@@ -52,5 +61,20 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
       message: "Something went wrong",
       messages: ["Something went wrong"]
     }
+  end
+
+  defp is_changeset?(error) do
+    with \
+      {:module, Ecto.Changeset} <- Code.ensure_compiled(Ecto.Changeset),
+      Ecto.Changeset <- Map.get(error, :__struct__)
+    do
+      true
+    else
+      _ -> false
+    end
+  end
+
+  defp is_map?(error) do
+    is_map(error) && !Map.has_key?(error, :__struct__)
   end
 end

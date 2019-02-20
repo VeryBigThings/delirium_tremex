@@ -64,8 +64,12 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
   end
 
   defp is_changeset?(error) do
-    case Code.ensure_compiled(Ecto.Changeset) do
-      {:module, Ecto.Changeset} -> !Map.get(error, :valid?)
+    with \
+      {:module, Ecto.Changeset} <- Code.ensure_compiled(Ecto.Changeset),
+      Ecto.Changeset <- Map.get(error, :__struct__)
+    do
+      true
+    else
       _ -> false
     end
   end

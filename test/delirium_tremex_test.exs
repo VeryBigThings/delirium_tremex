@@ -11,4 +11,12 @@ defmodule DeliriumTremexTest do
     map = DeliriumTremex.Middleware.HandleErrors.call(%{errors: [:unauthorized], state: :resolved}, %{})
     assert hd(map[:errors])[:key] == :unauthorized
   end
+
+  test "format changeset error without ecto dependency as an unknown error" do
+    error_cs = %Ecto.Testset{valid?: false, changes: %{foo: "bar"}}
+
+    map = DeliriumTremex.Middleware.HandleErrors.call(%{errors: [error_cs], state: :resolved}, %{})
+
+    assert hd(map[:errors])[:key] == :unknown_error
+  end
 end

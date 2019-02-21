@@ -3,6 +3,7 @@
 /deps/
 /.fetch
 *.ez
+tags
 
 # Test reports
 /cover/

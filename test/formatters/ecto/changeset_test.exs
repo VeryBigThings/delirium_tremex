@@ -1,19 +1,20 @@
 defmodule DeliriumTremex.Formatters.Ecto.ChangesetTest do
   use ExUnit.Case
   doctest DeliriumTremex
+  alias DeliriumTremex.Formatters.Ecto.Changeset
 
   describe "nested changeset formatting" do
     test "error nested inside map returns error inside suberrors list" do
-      data = {:foo, %{bar: [{"can't be blank", [validation: :required]}]}}
+      data = {:address, %{address_line1: [{"can't be blank", [validation: :required]}]}}
 
-      formatted_data = DeliriumTremex.Formatters.Ecto.Changeset.format(data)
+      formatted_data = Changeset.format(data)
 
       assert formatted_data[:suberrors] == [
                %{
-                 full_messages: ["Bar can't be blank"],
+                 full_messages: ["Address_line1 can't be blank"],
                  index: nil,
-                 key: :bar,
-                 message: "Bar can't be blank",
+                 key: :address_line1,
+                 message: "Address_line1 can't be blank",
                  messages: ["can't be blank"],
                  suberrors: nil
                }
@@ -22,35 +23,35 @@ defmodule DeliriumTremex.Formatters.Ecto.ChangesetTest do
 
     test "error nested inside list of maps returns error inside nested suberrors list" do
       data =
-        {:foos,
+        {:comments,
          [
            %{
-             bar_id: [
+             user_id: [
                {"does not exist",
                 [
                   constraint: :foreign,
-                  constraint_name: "foos_bar_id_fkey"
+                  constraint_name: "comments_user_id_fkey"
                 ]}
              ]
            },
            %{}
          ]}
 
-      formatted_data = DeliriumTremex.Formatters.Ecto.Changeset.format(data)
+      formatted_data = Changeset.format(data)
 
       assert formatted_data[:suberrors] == [
                %{
                  full_messages: nil,
                  index: nil,
-                 key: :foos,
-                 message: "Foos errors",
+                 key: :comments,
+                 message: "Comments errors",
                  messages: nil,
                  suberrors: [
                    %{
-                     full_messages: ["Bar_id does not exist"],
+                     full_messages: ["User_id does not exist"],
                      index: nil,
-                     key: :bar_id,
-                     message: "Bar_id does not exist",
+                     key: :user_id,
+                     message: "User_id does not exist",
                      messages: ["does not exist"],
                      suberrors: nil
                    }

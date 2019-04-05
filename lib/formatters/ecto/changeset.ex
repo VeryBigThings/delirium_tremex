@@ -1,6 +1,6 @@
 defmodule DeliriumTremex.Formatters.Ecto.Changeset do
   def format({key, [%{} | _] = errors} = _error) when is_list(errors) do
-    errors = Enum.filter(errors, fn x -> not (x == %{}) end)
+    errors = remove_empty_maps(errors)
     human_key = humanize(key)
 
     [
@@ -9,8 +9,7 @@ defmodule DeliriumTremex.Formatters.Ecto.Changeset do
       messages: nil,
       full_messages: nil,
       index: nil,
-      suberrors:
-        Enum.map(errors, fn err -> format({key, err}) end) |> Enum.map(&convert_list_to_map/1)
+      suberrors: Enum.map(errors, fn err -> format({key, err}) |> Enum.into(%{}) end)
     ]
   end
 
@@ -40,7 +39,7 @@ defmodule DeliriumTremex.Formatters.Ecto.Changeset do
       messages: nil,
       full_messages: nil,
       index: nil,
-      suberrors: Enum.map(errors, &format/1) |> Enum.map(&convert_list_to_map/1)
+      suberrors: Enum.map(errors, fn err -> format(err) |> Enum.into(%{}) end)
     ]
   end
 
@@ -72,8 +71,8 @@ defmodule DeliriumTremex.Formatters.Ecto.Changeset do
     Gettext.dgettext(DeliriumTremex.Gettext, "errors", msg, opts)
   end
 
-  defp convert_list_to_map(keyword_list) do
-    keyword_list
-    |> Enum.into(%{})
+  defp remove_empty_maps(list_of_maps) do
+    list_of_maps
+    |> Enum.filter(fn x -> not (x == %{}) end)
   end
 end

@@ -72,7 +72,6 @@ defmodule DeliriumTremex.Formatters.Ecto.Changeset do
   end
 
   defp remove_empty_maps(list_of_maps) do
-    list_of_maps
-    |> Enum.filter(fn x -> not (x == %{}) end)
+    Enum.filter(list_of_maps, fn x -> not (x == %{}) end)
   end
 end

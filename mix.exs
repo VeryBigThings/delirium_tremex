@@ -29,7 +29,7 @@ defmodule DeliriumTremex.Mixfile do
       {:gettext, "~> 0.13"},
       {:absinthe, "~> 1.4"},
       {:absinthe_plug, "~> 1.4"},
-      {:confex, "~> 3.3.1"}
+      {:confex, "~> 3.4"}
     ]
   end
 end

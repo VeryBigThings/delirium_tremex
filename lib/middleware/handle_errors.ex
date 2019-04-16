@@ -72,6 +72,6 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
   end
 
   defp error_builder do
-    Confex.get_env(DeliriumTremex.Mixfile.project()[:app], :error_builder)
+    Confex.get_env(:delirium_tremex, :error_builder)
   end
 end

@@ -75,7 +75,7 @@ Add the following to your `mix.exs` file:
 defp deps do
   [
     {:absinthe, "~> 1.4"},
-    {:delirium_tremex, "~> 0.1.0"}
+    {:delirium_tremex, "~> 1.0.0"}
   ]
 end
 ```
@@ -141,6 +141,11 @@ defmodule YourAppName.ErrorBuilder do
   end
 end
 ```
+
+## Documentation
+
+Documentation available on [https://hexdocs.pm/alcotest](https://hexdocs.pm/alcotest).
+
 ## Contribution
 
 For suggestions, fixes or questions, please feel free to open an issue.

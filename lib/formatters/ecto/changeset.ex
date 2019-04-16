@@ -1,4 +1,5 @@
 defmodule DeliriumTremex.Formatters.Ecto.Changeset do
+  @spec format(error :: tuple()) :: Keyword.t()
   def format({key, [%{} | _] = errors} = _error) when is_list(errors) do
     errors = remove_empty_maps(errors)
     human_key = humanize(key)

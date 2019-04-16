@@ -3,8 +3,6 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
 
   alias Absinthe.Resolution
 
-  @error_builder Confex.get_env(DeliriumTremex.Mixfile.project()[:app], :error_builder)
-
   def call(%{errors: errors} = resolution, _config) when is_list(errors) do
     Resolution.put_result(resolution, {:error, format_errors(errors)})
   end
@@ -28,10 +26,8 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
 
   defp format_changeset_error(changeset) do
     changeset
-      |> Ecto.Changeset.traverse_errors(fn error -> error end)
-      |> Enum.map(
-        &DeliriumTremex.Formatters.Ecto.Changeset.format/1
-      )
+    |> Ecto.Changeset.traverse_errors(fn error -> error end)
+    |> Enum.map(&DeliriumTremex.Formatters.Ecto.Changeset.format/1)
   end
 
   defp format_map_error(error) do
@@ -39,11 +35,9 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
   end
 
   defp format_atom_error(error) do
-    with \
-      false <- is_nil(@error_builder),
-      true <- Keyword.has_key?(@error_builder.__info__(:functions), error),
-      %{message: _, messages: _} = error_message <- apply(@error_builder, error, [])
-    do
+    with false <- is_nil(error_builder()),
+         true <- Keyword.has_key?(error_builder().__info__(:functions), error),
+         %{message: _, messages: _} = error_message <- apply(error_builder(), error, []) do
       Map.put(error_message, :key, error)
     else
       _ -> unknown_error()
@@ -64,10 +58,8 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
   end
 
   defp is_changeset?(error) do
-    with \
-      {:module, Ecto.Changeset} <- Code.ensure_compiled(Ecto.Changeset),
-      Ecto.Changeset <- Map.get(error, :__struct__)
-    do
+    with {:module, Ecto.Changeset} <- Code.ensure_compiled(Ecto.Changeset),
+         Ecto.Changeset <- Map.get(error, :__struct__) do
       true
     else
       _ -> false
@@ -76,5 +68,9 @@ defmodule DeliriumTremex.Middleware.HandleErrors do
 
   defp is_map?(error) do
     is_map(error) && !Map.has_key?(error, :__struct__)
+  end
+
+  defp error_builder do
+    Confex.get_env(DeliriumTremex.Mixfile.project()[:app], :error_builder)
   end
 end

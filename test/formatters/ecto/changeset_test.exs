@@ -39,24 +39,22 @@ defmodule DeliriumTremex.Formatters.Ecto.ChangesetTest do
 
       formatted_data = Changeset.format(data)
 
-      assert formatted_data[:suberrors] == [
-               %{
-                 full_messages: nil,
-                 index: nil,
-                 key: :comments,
-                 message: "Comments errors",
-                 messages: nil,
-                 suberrors: [
-                   %{
-                     full_messages: ["User_id does not exist"],
-                     index: nil,
-                     key: :user_id,
-                     message: "User_id does not exist",
-                     messages: ["does not exist"],
-                     suberrors: nil
-                   }
-                 ]
-               }
+      assert formatted_data == [
+               message: "Comments errors",
+               key: :comments,
+               messages: nil,
+               full_messages: nil,
+               index: nil,
+               suberrors: [
+                 %{
+                   full_messages: ["User_id does not exist"],
+                   index: nil,
+                   key: :user_id,
+                   message: "User_id does not exist",
+                   messages: ["does not exist"],
+                   suberrors: nil
+                 }
+               ]
              ]
     end
   end

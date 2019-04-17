@@ -2,16 +2,10 @@ defmodule DeliriumTremex.Formatters.Ecto.Changeset do
   @spec format(error :: tuple()) :: Keyword.t()
   def format({key, [%{} | _] = errors} = _error) when is_list(errors) do
     errors = remove_empty_maps(errors)
-    human_key = humanize(key)
 
-    [
-      message: "#{human_key} errors",
-      key: key,
-      messages: nil,
-      full_messages: nil,
-      index: nil,
-      suberrors: Enum.map(errors, fn err -> format({key, err}) |> Enum.into(%{}) end)
-    ]
+    Enum.reduce(errors, [], fn err, acc ->
+      merge_suberror_kw_lists(acc, format({key, err}))
+    end)
   end
 
   def format({key, errors} = _error) when is_list(errors) do
@@ -70,6 +64,15 @@ defmodule DeliriumTremex.Formatters.Ecto.Changeset do
 
   defp translate_error({msg, opts}) do
     Gettext.dgettext(DeliriumTremex.Gettext, "errors", msg, opts)
+  end
+
+  defp merge_suberror_kw_lists(kw_list1, kw_list2) do
+    Keyword.merge(kw_list1, kw_list2, fn key, v1, v2 ->
+      case key do
+        :suberrors -> Enum.concat(v1, v2)
+        _ -> v1
+      end
+    end)
   end
 
   defp remove_empty_maps(list_of_maps) do
